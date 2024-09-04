@@ -1,18 +1,13 @@
 const express = require("express");
+const handle = require("./handle");
 
 const app = express();
 
-const router = express.Router({
-  caseSensitive: true, //if we want to make it case sensitive then
-}); //it is return a router object
-app.use(router); //and i tell me to my app to use this router
+app.locals.title = "My App";
 
-//then it also works if we replace the get into router
-router.get("/about", (req, res) => {
-  res.send("This is home page");
-});
+app.get("/", handle);
 
-router.post("/", (req, res) => {
+app.post("/", (req, res) => {
   res.send("This is home page with post request");
 });
 
