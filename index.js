@@ -2,19 +2,17 @@ const express = require("express");
 
 const app = express();
 
-//to access the public folder as static root folder then we have express.static
-app.use(
-  express.static(`${__dirname}/public/`, {
-    index: "home.html",
-  })
-);
-//now if we hit the url (http://localhost:5001/text) then we can see the result hello world(or what text have in the txt file)
+const router = express.Router({
+  caseSensitive: true, //if we want to make it case sensitive then
+}); //it is return a router object
+app.use(router); //and i tell me to my app to use this router
 
-app.get("/", (req, res) => {
+//then it also works if we replace the get into router
+router.get("/about", (req, res) => {
   res.send("This is home page");
 });
 
-app.post("/", (req, res) => {
+router.post("/", (req, res) => {
   res.send("This is home page with post request");
 });
 
