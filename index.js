@@ -3,6 +3,11 @@ const express = require("express");
 const app = express();
 const admin = express();
 
+admin.on("mount", (parent) => {
+  console.log("Admin Mounted");
+  console.log(parent); // refers to the parent app
+});
+
 admin.get("/dashboard", (req, res) => {
   console.log(admin.mountpath);
   res.send("Welcome to the admin dashboard");
