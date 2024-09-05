@@ -2,9 +2,18 @@ const express = require("express");
 
 const app = express();
 
-app.enable("case sensitive routing");
+app.param("id", (req, res, next, id) => {
+  console.log(id, "id");
+  const user = {
+    userId: id,
+    name: "USA",
+  };
+  req.userDetails = user;
+  next();
+});
 
-app.all("/about", (req, res) => {
+app.get("/user/:id", (req, res) => {
+  console.log(req.userDetails);
   res.send("This is home page with get request");
 });
 
