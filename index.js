@@ -2,8 +2,9 @@ const express = require("express");
 
 const app = express();
 
-app.all("/", (req, res) => {
-  //after set app.all it will be accessible to all the methods
+app.enable("case sensitive routing");
+
+app.all("/about", (req, res) => {
   res.send("This is home page with get request");
 });
 
