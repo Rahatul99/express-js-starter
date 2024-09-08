@@ -1,6 +1,8 @@
 const handler = (req, res) => {
-  console.log(req.app.get("view engine"));
-  // console.log(req.cookies);
+  // console.log(req.accepts("json")); //**json** in header if we sat accepts application/json
+  // console.log(req.accepts("html")); //**false** in header if we sat accepts application/json
+
+  console.log(req.get("accept"));
   res.send("Hello world");
 };
 

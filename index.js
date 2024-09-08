@@ -18,9 +18,7 @@ adminRoute.get("/dashboard", (req, res) => {
 
 app.use("/admin", adminRoute);
 
-app.get("/user/:id", (req, res) => {
-  handler;
-});
+app.get("/user/:id", handler);
 app.post("/user/", (req, res) => {
   console.log(req.route);
   res.send("Hello world");
