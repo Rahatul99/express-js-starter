@@ -6,9 +6,11 @@ app.use(express.json()); //before use this we got the req.body undefined.but aft
 app.set("view engine", "ejs");
 
 app.get("/about", (req, res) => {
+  console.log(res.headersSent);
   res.render("pages/about", {
     name: "Bangladesh",
   });
+  console.log(res.headersSent);
 });
 
 app.get("/user/:id", handler);
