@@ -6,26 +6,10 @@ app.use(express.json()); //before use this we got the req.body undefined.but aft
 app.set("view engine", "ejs");
 
 app.get("/about", (req, res) => {
-  res.format({
-    "text/plain": () => {
-      res.send("hi");
-    },
-    "text/html": () => {
-      res.render("pages/about", {
-        name: "USA",
-      });
-    },
-    "application/json": () => {
-      res.json({
-        message: "About",
-      });
-    },
-    default: () => {
-      res.status(406).send("Not acceptable");
-    },
-  });
+  res.cookie("name", "Hello world", {});
+  res.end();
 });
 
 app.listen(5001, () => {
-  console.log("listening on port 5000");
+  console.log("listening on port 5001");
 });
