@@ -6,17 +6,24 @@ app.use(express.json()); //before use this we got the req.body undefined.but aft
 app.set("view engine", "ejs");
 
 app.get("/about", (req, res) => {
-  console.log(res.headersSent);
-  res.render("pages/about", {
-    name: "Bangladesh",
+  res.format({
+    "text/plain": () => {
+      res.send("hi");
+    },
+    "text/html": () => {
+      res.render("pages/about", {
+        name: "USA",
+      });
+    },
+    "application/json": () => {
+      res.json({
+        message: "About",
+      });
+    },
+    default: () => {
+      res.status(406).send("Not acceptable");
+    },
   });
-  console.log(res.headersSent);
-});
-
-app.get("/user/:id", handler);
-app.post("/user/", (req, res) => {
-  console.log(req.route);
-  res.send("Hello world");
 });
 
 app.listen(5001, () => {
