@@ -7,22 +7,34 @@ app.use(express.json());
 app.use(cookieParser());
 const adminRouter = express.Router();
 
-const myMiddleware = (req, res, next) => {
-  console.log(
-    `${new Date(Date.now()).toLocaleDateString()} - ${req.method} -${
-      req.originalUrl
-    } - ${req.protocol} - ${req.ip}}`
-  );
-  // next(); //if we didn't call the next then it stuck on this function.   NB: if we give any value on the the next() it seems like an error, so if we want to return success then it should to have empty
+// const myMiddleware = (req, res, next) => {
+//   console.log(
+//     `${new Date(Date.now()).toLocaleDateString()} - ${req.method} -${
+//       req.originalUrl
+//     } - ${req.protocol} - ${req.ip}}`
+//   );
+//   next();
+// };
 
-  //now if instead of next we sat res.end it works fine for the middleware but the other route will be avoided
-  // res.end();
-
-  //now lets see the error handling middleware
-  throw new Error("This is an error");
+// now if we have to sent or receive any data in middleware then we can do like below
+const myMiddlewareWrapper = (options) => {
+  return (req, res, next) => {
+    if (options.log) {
+      console.log(
+        `${new Date(Date.now()).toLocaleDateString()} - ${req.method} -${
+          req.originalUrl
+        } - ${req.protocol} - ${req.ip}}`
+      );
+      next();
+    } else {
+      throw new Error("Failed to log");
+    }
+  };
 };
+// adminRouter.use(myMiddleware);
+adminRouter.use(myMiddlewareWrapper({ log: true }));
 
-adminRouter.use(myMiddleware);
+//------------
 adminRouter.get("/dashboard", (req, res) => {
   res.send("Dashboard");
 });
