@@ -2,29 +2,23 @@ const express = require("express");
 
 const publicRouter = express.Router();
 
-// const log = (req, res, next) => {
-//   console.log("I am logged in");
-//   next();
-// };
-
-// publicRouter.all("*", log);
-
-publicRouter.param((param, option) => (req, res, next, val) => {
-  if (val === option) {
+publicRouter
+  .route("/user")
+  .all((req, res, next) => {
+    console.log("I am logging");
     next();
-  } else {
-    res.sendStatus(403);
-  }
-});
-
-publicRouter.param("user", "12");
-
-publicRouter.get("/:user", (req, res) => {
-  res.send(`Hello admin`);
-});
-
-publicRouter.get("/login", (req, res) => {
-  res.send("login");
-});
+  })
+  .get((req, res) => {
+    res.send("GET");
+  })
+  .post((req, res) => {
+    res.send("POST");
+  })
+  .put((req, res) => {
+    res.send("PUT");
+  })
+  .delete((req, res) => {
+    res.send("DELETE");
+  });
 
 module.exports = publicRouter;
