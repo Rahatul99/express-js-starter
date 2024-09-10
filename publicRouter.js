@@ -9,8 +9,14 @@ const log = (req, res, next) => {
 
 publicRouter.all("*", log);
 
+publicRouter.param("user", (req, res, next, id) => {
+  req.user = id === "1" ? "Admin" : "Anonymous";
+  console.log("Hello world");
+  next();
+});
+
 publicRouter.get("/:user", (req, res) => {
-  res.send(`"Dashboard"`);
+  res.send(`Hello ${req.user}`);
 });
 
 publicRouter.get("/login", (req, res) => {
