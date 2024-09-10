@@ -1,24 +1,13 @@
 const express = require("express");
+// const adminRouter = require("./adminRouter");
 
 const publicRouter = express.Router();
 
-publicRouter
-  .route("/user")
-  .all((req, res, next) => {
-    console.log("I am logging");
-    next();
-  })
-  .get((req, res) => {
-    res.send("GET");
-  })
-  .post((req, res) => {
-    res.send("POST");
-  })
-  .put((req, res) => {
-    res.send("PUT");
-  })
-  .delete((req, res) => {
-    res.send("DELETE");
-  });
+publicRouter.uae((req, res, next) => {
+  console.log("Loading");
+  next();
+});
+
+// publicRouter.uee(adminRouter);
 
 module.exports = publicRouter;
