@@ -1,19 +1,20 @@
 const express = require("express");
-const handler = require("./handler");
 
 const app = express();
-app.use(express.json()); //before use this we got the req.body undefined.but after set this parser i got the real data
-app.set("view engine", "ejs");
 
-app.get("/test", (req, res) => {
-  res.send("Hello");
-});
+const myMiddleware = (req, res, next) => {
+  console.log(
+    `${new Date(Date.now()).toLocaleDateString()} - ${req.method} -${
+      req.originalUrl
+    } - ${req.protocol} - ${req.ip}}`
+  );
+  next(); //if we didn't call the next then it stuck on this function.
+};
+
+app.use(myMiddleware);
+
 app.get("/about", (req, res) => {
-  // res.location("/test");
-  // res.redirect("/test");
-  res.set("Platform", "Learn with sumit");
-  console.log(res.get("Platform"));
-  res.end();
+  res.send("About");
 });
 
 app.listen(5001, () => {
