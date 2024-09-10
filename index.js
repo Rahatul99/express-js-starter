@@ -3,6 +3,7 @@ const express = require("express");
 const cookieParser = require("cookie-parser");
 const app = express();
 
+app.use(express.json());
 app.use(cookieParser());
 const adminRouter = express.Router();
 
@@ -16,6 +17,9 @@ const myMiddleware = (req, res, next) => {
 
   //now if instead of next we sat res.end it works fine for the middleware but the other route will be avoided
   // res.end();
+
+  //now lets see the error handling middleware
+  throw new Error("This is an error");
 };
 
 adminRouter.use(myMiddleware);
@@ -28,6 +32,13 @@ app.use("/admin", adminRouter);
 app.get("/about", (req, res) => {
   res.send("About");
 });
+
+const errorMiddleware = (err, req, res, next) => {
+  console.log(err);
+  res.status(500).send("There was a server side error");
+};
+
+adminRouter.use(errorMiddleware);
 
 app.listen(5001, () => {
   console.log("listening on port 5001");
