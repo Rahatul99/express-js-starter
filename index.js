@@ -3,14 +3,19 @@ const app = express();
 const fs = require("fs");
 
 app.get("/", (req, res, next) => {
-  fs.readFile("/file-does-not-exist", (err, data) => {
-    if (err) {
+  setTimeout(() => {
+    try {
+      console.log(a);
+    } catch (err) {
       next(err);
-    } else {
-      res.send(data);
     }
-  });
-}); //in this case it not showing any error instead it hanging
+  }, 100);
+});
+
+app.use((req, res, next) => {
+  console.log("I am not called");
+  next();
+});
 
 app.use((err, req, res, next) => {
   if (res.headersSent) {
