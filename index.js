@@ -3,13 +3,13 @@ const app = express();
 const fs = require("fs");
 
 app.get("/", (req, res, next) => {
-  setTimeout(() => {
-    try {
-      console.log(a);
-    } catch (err) {
-      next(err);
-    }
-  }, 100);
+  fs.readFile("/file-doesn't-exist", "utf-8", (err, data) => {
+    console.log(data);
+    next(err);
+  });
+  (req, res, next) => {
+    console.log(data.property);
+  };
 });
 
 app.use((req, res, next) => {
