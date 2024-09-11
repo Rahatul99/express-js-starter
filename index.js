@@ -1,28 +1,20 @@
 const express = require("express");
 const app = express();
+const fs = require("fs");
 
 app.get("/", (req, res, next) => {
-  for (let i = 0; i <= 10; i++) {
-    // res.write("a");
-    if (i === 5) {
-      next("There was an error");
+  fs.readFile("/file-does-not-exist", (err, data) => {
+    if (err) {
+      next(err);
     } else {
-      res.write("a");
+      res.send(data);
     }
-  }
-  res.end();
-});
+  });
+}); //in this case it not showing any error instead it hanging
 
-//for the wrong route error handling
-app.use((req, res, next) => {
-  next("Requested url was not found");
-});
-
-//noted it will be the custom error handling middleware. it should be last middleware function of the code
-app.use((req, res, next) => {
-  // next("Requested url not found");
+app.use((err, req, res, next) => {
   if (res.headersSent) {
-    next("There was an problem");
+    next("There was a problem");
   } else {
     if (err.message) {
       res.status(500).send(err.message);
