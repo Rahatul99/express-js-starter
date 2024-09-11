@@ -10,7 +10,7 @@ const upload = multer({
   dest: UPLOADS_FOLDER,
 });
 
-app.post("/", upload.single(), (req, res) => {
+app.post("/", upload.array("avatar", 3), (req, res) => {
   res.send("hello");
 });
 
