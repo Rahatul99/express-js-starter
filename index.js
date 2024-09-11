@@ -1,32 +1,17 @@
 const express = require("express");
 const app = express();
-const fs = require("fs");
+const multer = require("multer");
 
-app.get("/", (req, res, next) => {
-  fs.readFile("/file-doesn't-exist", "utf-8", (err, data) => {
-    console.log(data);
-    next(err);
-  });
-  (req, res, next) => {
-    console.log(data.property);
-  };
+//file upload
+const UPLOADS_FOLDER = "./uploads/";
+
+//prefer the final multer upload object
+const upload = multer({
+  dest: UPLOADS_FOLDER,
 });
 
-app.use((req, res, next) => {
-  console.log("I am not called");
-  next();
-});
-
-app.use((err, req, res, next) => {
-  if (res.headersSent) {
-    next("There was a problem");
-  } else {
-    if (err.message) {
-      res.status(500).send(err.message);
-    } else {
-      res.send("There was an error");
-    }
-  }
+app.post("/", upload.single(), (req, res) => {
+  res.send("hello");
 });
 
 app.listen(5001, () => {
