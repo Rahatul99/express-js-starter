@@ -44,12 +44,16 @@ router.post("/all", async (req, res) => {
 
 //PUT TODO
 router.put("/:id", async (req, res) => {
-  await Todo.updateOne(
+  const result = await Todo.findByIdAndUpdate(
     { _id: req.params.id },
     {
       $set: {
         status: "active",
       },
+    },
+    {
+      new: true,
+      useFindAndModify: false,
     },
     (err) => {
       if (err) {
@@ -63,6 +67,7 @@ router.put("/:id", async (req, res) => {
       }
     }
   );
+  console.log(result);
 });
 
 //DELETE TODO
