@@ -6,7 +6,19 @@ const Todo = new mongoose.model("Todo", todoSchema);
 
 //GET ALL THE TODO
 router.get("/", async (req, res) => {
-  res.send("hello");
+  await Todo.find({ status: "active" }),
+    (err, data) => {
+      if (err) {
+        res.status(500).json({
+          error: "There was a server side error!",
+        });
+      } else {
+        res.status(200).json({
+          result: data,
+          message: "success",
+        });
+      }
+    };
 });
 
 //GET A TODO
