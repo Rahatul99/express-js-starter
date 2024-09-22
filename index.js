@@ -1,25 +1,33 @@
 const express = require("express");
+const mongoose = require("mongoose");
+const todoHandler = require("./routerHandler/toDoHandler");
+
+//express app initialization
 const app = express();
-const multer = require("multer");
+app.use(express.json());
 
-//file upload
-const UPLOADS_FOLDER = "./uploads/";
+//database app connection with mongoose
+mongoose
+  .connect("mongodb://localhost/todos", {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => {
+    console.log("Connected to MongoDB successfully!");
+  })
+  .catch((err) => {
+    console.error("Failed to connect to MongoDB:", err);
+  });
 
-//prefer the final multer upload object
-const upload = multer({
-  dest: UPLOADS_FOLDER,
-});
+//application routes
+app.use("/todo", todoHandler);
 
-app.post(
-  "/",
-  upload.fields([
-    { name: "avatar", maxCount: 1 },
-    { name: "gallery", maxCount: 2 },
-  ]),
-  (req, res) => {
-    res.send("hello");
+const errorHandler = (err, req, res, next) => {
+  if (res.headersSent) {
+    return next(err);
   }
-);
+  res.status(500).json({ error: err });
+};
 
 app.listen(5001, () => {
   console.log("listing on port 5001");
