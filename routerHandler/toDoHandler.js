@@ -12,6 +12,7 @@ router.get("/", async (req, res) => {
       _v: 0, //expect this field
       data: 0, //expect this field
     })
+    .limit(2)
     .exec((err, data) => {
       if (err) {
         res.status(500).json({
@@ -27,7 +28,20 @@ router.get("/", async (req, res) => {
 });
 
 //GET A TODO
-router.get("/:id", async (req, res) => {});
+router.get("/:id", async (req, res) => {
+  await Todo.find({ _id: req.params.id }, (err, data) => {
+    if (err) {
+      res.status(500).json({
+        error: "There was a server side error!",
+      });
+    } else {
+      res.status(200).json({
+        result: data,
+        message: "success",
+      });
+    }
+  });
+});
 
 // POST TODO
 router.post("/", async (req, res) => {
