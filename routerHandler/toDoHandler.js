@@ -5,8 +5,8 @@ const todoSchema = require("../schemas/todoSchema");
 const Todo = new mongoose.model("Todo", todoSchema);
 
 //GET ALL THE TODO
-router.get("/", async (req, res) => {
-  await Todo.find({ status: "active" })
+router.get("/", (req, res) => {
+  Todo.find({ status: "active" })
     .select({
       _id: 0, //expect this field
       _v: 0, //expect this field
@@ -29,18 +29,30 @@ router.get("/", async (req, res) => {
 
 //GET A TODO
 router.get("/:id", async (req, res) => {
-  await Todo.find({ _id: req.params.id }, (err, data) => {
-    if (err) {
-      res.status(500).json({
-        error: "There was a server side error!",
-      });
-    } else {
-      res.status(200).json({
-        result: data,
-        message: "success",
-      });
-    }
-  });
+  // await Todo.find({ _id: req.params.id }, (err, data) => {
+  //   if (err) {
+  //     res.status(500).json({
+  //       error: "There was a server side error!",
+  //     });
+  //   } else {
+  //     res.status(200).json({
+  //       result: data,
+  //       message: "success",
+  //     });
+  //   }
+  // });
+
+  try {
+    const data = await Todo.find({ _id: req.params.id });
+    res.status(200).json({
+      result: data,
+      message: "Success",
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: "There was a server side error!",
+    });
+  }
 });
 
 // POST TODO
@@ -102,6 +114,18 @@ router.put("/:id", async (req, res) => {
 });
 
 //DELETE TODO
-router.delete("/:id", async (req, res) => {});
+router.delete("/:id", async (req, res) => {
+  await Todo.deleteOne({ _id: req.params.id }, (err) => {
+    if (err) {
+      res.status(500).json({
+        error: "There was a server side error!",
+      });
+    } else {
+      res.status(200).json({
+        message: "success",
+      });
+    }
+  });
+});
 
 module.exports = router;
