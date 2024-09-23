@@ -159,4 +159,12 @@ router.get("/js", async (req, res) => {
   });
 });
 
+// -------query helper-------------
+router.get("/language", async (req, res) => {
+  const data = await Todo.find().byLanguage("js");
+  res.status(208).json({
+    data,
+  });
+});
+
 module.exports = router;
