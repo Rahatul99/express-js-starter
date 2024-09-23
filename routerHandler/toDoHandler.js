@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
 const todoSchema = require("../schemas/todoSchema");
-const Todo = new mongoose.model("Todo", todoSchema);
+const Todo = new mongoose.model("Todo", todoSchema); //model
 
 //GET ALL THE TODO
 router.get("/", (req, res) => {
@@ -58,7 +58,7 @@ router.get("/:id", async (req, res) => {
 // POST TODO
 router.post("/", async (req, res) => {
   try {
-    const newTodo = new Todo(req.body);
+    const newTodo = new Todo(req.body); //actual document
     await newTodo.save();
     res.status(200).json({
       message: "Todo was inserted successfully",
@@ -126,6 +126,30 @@ router.delete("/:id", async (req, res) => {
       });
     }
   });
+});
+
+///----------------------
+//Get Active Todos
+router.get("/active", async (req, res) => {
+  const todo = new Todo();
+  const data = await todo.findActive();
+  res.status(200).json({
+    data,
+  });
+});
+
+//Get Active TODOS with callbacks
+router.get("/active-callback", async (req, res) => {
+  const todo = new Todo();
+  todo.findActiveCallback((err, data) => {
+    res.status(200).json({
+      data,
+    });
+  });
+  // const data = await todo.findActive();
+  // res.status(200).json({
+  //   data,
+  // });
 });
 
 module.exports = router;
