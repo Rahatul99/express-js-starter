@@ -128,7 +128,7 @@ router.delete("/:id", async (req, res) => {
   });
 });
 
-///----------------------
+///----------------------Instance method-------
 //Get Active Todos
 router.get("/active", async (req, res) => {
   const todo = new Todo();
@@ -150,6 +150,13 @@ router.get("/active-callback", async (req, res) => {
   // res.status(200).json({
   //   data,
   // });
+});
+///----------------------Static method-------
+router.get("/js", async (req, res) => {
+  const data = await Todo.findByJS();
+  res.status(200).json({
+    data,
+  });
 });
 
 module.exports = router;
