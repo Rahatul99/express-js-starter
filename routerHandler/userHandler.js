@@ -1,5 +1,6 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const router = express.Router();
 const mongoose = require("mongoose");
 const userSchema = require("../schemas/userSchema");
@@ -27,18 +28,43 @@ router.get("/signup", async (req, res) => {
 
 //LOGIN
 router.get("/login", async (req, res) => {
-  const user = await User.find({ username: req.body.username });
-  if (user && user.length > 0) {
-    const isValidPassword = await bcrypt.compare(
-      req.body.password,
-      user[0].password
-    );
-    if (isValidPassword) {
+  try {
+    const user = await User.find({ username: req.body.username });
+    if (user && user.length > 0) {
+      const isValidPassword = await bcrypt.compare(
+        req.body.password,
+        user[0].password
+      );
+      if (isValidPassword) {
+        // Generate token
+        const token = jwt.sign(
+          {
+            username: user[0].username,
+            userId: user[0]._id,
+          },
+          process.env.JWT_SECRET,
+          {
+            expiresIn: "1h",
+          }
+        );
+        res.status(200).json({
+          "access-token": token,
+          message: "Login successful",
+        });
+      } else {
+        res.status(401).json({
+          error: "Authentication failed",
+        });
+      }
     } else {
-      res.status(401).join({
+      res.status(401).json({
         error: "Authentication failed",
       });
     }
+  } catch (err) {
+    res.status(500).json({
+      error: "Something went wrong",
+    });
   }
 });
 
