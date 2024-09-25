@@ -7,7 +7,8 @@ const checkLogin = require("../middleware/checkLogin");
 
 //GET ALL THE TODO
 router.get("/", checkLogin, (req, res) => {
-  Todo.find({ status: "active" })
+  Todo.find({})
+    .populate("user", "name username -_id") //to populate with existing id we can just use it to get all the field (populate())---for specific (populate("user", "username"))
     .select({
       _id: 0, //expect this field
       _v: 0, //expect this field
@@ -57,9 +58,9 @@ router.get("/:id", async (req, res) => {
 });
 
 // POST TODO
-router.post("/", async (req, res) => {
+router.post("/", checkLogin, async (req, res) => {
+  const newTodo = new Todo({ ...req.body, user: req.userId }); //actual document
   try {
-    const newTodo = new Todo(req.body); //actual document
     await newTodo.save();
     res.status(200).json({
       message: "Todo was inserted successfully",

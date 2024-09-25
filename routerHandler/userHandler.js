@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const router = express.Router();
 const mongoose = require("mongoose");
 const userSchema = require("../schemas/userSchema");
-const User = new mongoose.model("Todo", userSchema); //model
+const User = new mongoose.model("User", userSchema); //model
 
 //SIGNUP
 router.get("/signup", async (req, res) => {
