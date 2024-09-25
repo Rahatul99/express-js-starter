@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const todoHandler = require("./routerHandler/toDoHandler");
+const userSchema = require("./schemas/userSchema");
 
 //express app initialization
 const app = express();
@@ -21,6 +22,7 @@ mongoose
 
 //application routes
 app.use("/todo", todoHandler);
+app.use("/user", userSchema);
 
 const errorHandler = (err, req, res, next) => {
   if (res.headersSent) {
