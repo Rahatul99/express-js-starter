@@ -3,6 +3,7 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const todoSchema = require("../schemas/todoSchema");
 const Todo = new mongoose.model("Todo", todoSchema); //model
+const User = new mongoose.model("User", todoSchema);
 const checkLogin = require("../middleware/checkLogin");
 
 //GET ALL THE TODO
@@ -61,7 +62,17 @@ router.get("/:id", async (req, res) => {
 router.post("/", checkLogin, async (req, res) => {
   const newTodo = new Todo({ ...req.body, user: req.userId }); //actual document
   try {
-    await newTodo.save();
+    const todo = await newTodo.save();
+    await User.updateOne(
+      {
+        _id: req.userId,
+      },
+      {
+        $push: {
+          todos: todo._id,
+        },
+      }
+    );
     res.status(200).json({
       message: "Todo was inserted successfully",
     });
